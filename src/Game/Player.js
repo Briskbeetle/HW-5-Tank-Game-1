@@ -1,25 +1,25 @@
 const Phaser = require('phaser');
 
 class Player {
-  constructor(x, y) {
+  constructor(x, y, radius) {
     this.x = x;
     this.y = y;
-    this.radius = 20; // radius used for collision detection
-
-    // movement
+    this.radius = radius;
     this.moveSpeed = 100;
-    this.forwardRot = 0;
-    this.rotSpeed = 1;
 
-    // Geometry used for rendering
-    this.baseGeo = [
+    this.rotSpeed = 2; 
+    this.forwardRot = Math.PI / 2; // pointing down in radians
+
+
+    // Geometry for remembering
+    this.baseGeo = [ // these points make up a tank!
       new Phaser.Geom.Point(-17, 10),
       new Phaser.Geom.Point(-8, 20),
       new Phaser.Geom.Point(8, 20),
       new Phaser.Geom.Point(17, 10),
       new Phaser.Geom.Point(17, -20),
       new Phaser.Geom.Point(-17, -20),
-      new Phaser.Geom.Point(-17, 10),
+      new Phaser.Geom.Point(-17, 10)
     ];
   }
 
@@ -31,34 +31,43 @@ class Player {
     this.y = newY;
   }
 
-  update(deltaTime, keys) {
+  update(deltaTime, keys) {// generates stuff every frame
+    const forwardX = -Math.sin(this.forwardRot); // because we are facing down and NOT to the we right we will use SIN instead of COS
+    const forwardY = Math.cos(this.forwardRot);
     // Player Movement
     if (keys.left.isDown) {
-      this.forwardRot -= this.rotSpeed * deltaTime / 1000
-    }
-    else if (keys.right.isDown) {
-      this.forwardRot += this.rotSpeed * deltaTime / 1000
-    }
+      //this.x -= this.moveSpeed * deltaTime / 1000; 
+      this.forwardRot -= this.rotSpeed * deltaTime / 1000;
 
-    // Calculate forward vector
-    const forwardX = -Math.sin(this.forwardRot);
-    const forwardY = Math.cos(this.forwardRot);
-    
+    }
+    if (keys.right.isDown) {
+      //this.x += this.moveSpeed * deltaTime / 1000; 
+      this.forwardRot += this.rotSpeed * deltaTime / 1000;
+
+    }
     if (keys.up.isDown) {
+      // this.y -= this.moveSpeed * deltaTime / 1000;
       this.x += this.moveSpeed * forwardX * deltaTime / 1000;
       this.y += this.moveSpeed * forwardY * deltaTime / 1000;
+    }
+    if (keys.down.isDown) {
+      // this.y += this.moveSpeed * deltaTime / 1000;
+      this.x -= this.moveSpeed * forwardX * deltaTime / 1000;
+      this.y -= this.moveSpeed * forwardY * deltaTime / 1000;
     }
   }
 
   draw(graphics) {
-    // render player base
+    // if(condition make red)
+    graphics.fillStyle(0xff0000, 1.0);
     graphics.save();
     graphics.translate(this.x, this.y);
     graphics.rotate(this.forwardRot);
-    graphics.strokePoints(this.baseGeo);
-
-    // render cannon
-    graphics.fillCircle(0, 0, 12);
+    // translate then rotate (the axis of the world) then scale
+   // graphics.fillCircle(0, 0, this.radius); // ciricle player
+    graphics.strokePoints(this.baseGeo);// tank player
+    // graphics.fillPoint() // check phaser api for out line help
+    graphics.fillCircle(0,0, 12);
     graphics.fillRect(-5, 0, 10, 25);
     graphics.restore();
   }
