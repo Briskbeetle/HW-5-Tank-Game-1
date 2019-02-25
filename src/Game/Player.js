@@ -87,7 +87,7 @@ class Player {
     graphics.translate(this.x, this.y);
     graphics.rotate(this.cannonRot);
     graphics.fillCircle(0,0, 12);
-
+    graphics.lineStyle(4, 0xff0000, 1.0)
     graphics.strokePoints(this.cannonGeo);
     graphics.restore();
   }

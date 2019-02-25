@@ -20,7 +20,7 @@ for(let i = 0; i < 20; i++) { // have only 20 bullets on screen at one time
 let wasLastFrameSpaceDown = false;
 
 const enemies = [];
-for(let i = 0; i < 20; i++) { // have only 4 enemies on screen at one time
+for(let i = 0; i < 5; i++) {
   enemies.push(new Enemy());
 }
 
@@ -28,6 +28,7 @@ for(let i = 0; i < 20; i++) { // have only 4 enemies on screen at one time
 let game;
 let graphics;
 let keys;
+let didFirstSpawn = false;
 
 /**
  * Helper function for checking if two circles are colliding
@@ -64,26 +65,26 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-let spawnTimer = 1000; // every 5 sec spawn a new enemy
+let spawnTimer = 2000; // every 5 sec spawn a new enemy
 
 function update(totalTime, deltaTime) {
   p1.update(deltaTime, keys);
 
   // Keep player on screen
-  if (p1.x > phaserConfig.width + 5) {
+  if (p1.x > phaserConfig.width + 20) {
     p1.setX(0);
   }
 
   if (p1.x < -5) {
-    p1.setX(phaserConfig.width - 5);
+    p1.setX(phaserConfig.width - 20);
   }
 
-  if (p1.y > phaserConfig.height + 5) {
+  if (p1.y > phaserConfig.height + 20) {
     p1.setY(0);
   }
 
   if (p1.y < -5) {
-    p1.setY(phaserConfig.height - 5);
+    p1.setY(phaserConfig.height - 20);
   }
   
   // spawning bullets
@@ -92,18 +93,16 @@ function update(totalTime, deltaTime) {
     // spawn bullet
     const newBullet = bullets.find((b) => {return !b.isActive;});
     if (newBullet) {
-      newBullet.activate(p1.x, p1.y, p1.forwardRot);
+      newBullet.activate(p1.x, p1.y, p1.cannonRot);
     }
      // bullets[0].activate(p1.x, p1.y, p1.forwardRot);
 
   }
   
-  
   // spawn a new enemy after 5 sec
   spawnTimer -= deltaTime;
   if(spawnTimer <= 0)
   {
-    console.log("Inside the spawn Timer");
     const newEnemy = enemies.find((e) => {return !e.isActive;});
     if(newEnemy){
       newEnemy.activate(getRandomInt(800), getRandomInt(600), getRandomInt(359));
@@ -119,6 +118,12 @@ function update(totalTime, deltaTime) {
           bullet.deactivate();
         }
       });
+    }
+  });
+
+  enemies.forEach((enemy) =>{
+    if(isCircleCollision(p1, enemy)){
+      enemy.deactivate();
     }
   });
 
