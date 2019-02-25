@@ -93,7 +93,10 @@ function update(totalTime, deltaTime) {
     // spawn bullet
     const newBullet = bullets.find((b) => {return !b.isActive;});
     if (newBullet) {
-      newBullet.activate(p1.x, p1.y, p1.cannonRot);
+      newBullet.activate(p1.x+(-Math.sin(p1.cannonRot)*23), p1.y+(Math.cos(p1.cannonRot)*15), p1.cannonRot);
+      //const forwardX = -Math.sin(this.forwardRot);
+      //const forwardY = Math.cos(this.forwardRot);
+
     }
      // bullets[0].activate(p1.x, p1.y, p1.forwardRot);
 

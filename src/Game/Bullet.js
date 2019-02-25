@@ -2,11 +2,20 @@ class Bullet {
   constructor() {
     this.x = 0;
     this.y = 0;
-    this.radius = 6;
+    this.radius = 20;
     this.moveSpeed = 250;
     this.forwardRot = 0; // direction it is facing
     this.isActive = false;// initializing bullts to be asleep
     this.deathTimer = 0; // 
+
+    this.cannonGeo = [
+      new Phaser.Geom.Point(-5, 18),
+      new Phaser.Geom.Point(0, 25),
+      new Phaser.Geom.Point(5, 18),
+      new Phaser.Geom.Point(5, 0),
+      new Phaser.Geom.Point(-5, 0),
+      new Phaser.Geom.Point(-5, 18)
+    ]
   }
 
 activate(x,y, forwardRot){
@@ -14,7 +23,7 @@ activate(x,y, forwardRot){
     this.y = y;
     this.forwardRot = forwardRot;
     this.isActive = true; // arm the bullet
-    this.deathTimer = 3000; 
+    this.deathTimer = 5000; 
 
 }
 
@@ -43,7 +52,10 @@ deactivate(){ // when timer is done and off screen
       // graphics.fillStyle(0xff0000, 1.0);
       graphics.save();
       graphics.translate(this.x, this.y);
-      graphics.fillCircle(0,0, this.radius);
+      graphics.rotate(this.forwardRot);
+     // graphics.fillCircle(0,0, this.radius);
+      graphics.lineStyle(3, 0xff0000, 1.0)
+      graphics.strokePoints(this.cannonGeo);
       graphics.restore();
     }
   }
