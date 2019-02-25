@@ -20,7 +20,7 @@ for(let i = 0; i < 20; i++) { // have only 20 bullets on screen at one time
 let wasLastFrameSpaceDown = false;
 
 const enemies = [];
-for(let i = 0; i < 1; i++) { // have only 4 enemies on screen at one time
+for(let i = 0; i < 20; i++) { // have only 4 enemies on screen at one time
   enemies.push(new Enemy());
 }
 
@@ -46,18 +46,25 @@ function isCircleCollision(c1, c2) {
 
 // Phaser setup
 function create () {
-  keys = this.input.keyboard.createCursorKeys();
+  keys = { left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT), 
+    right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT), 
+    up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP), 
+    down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN), 
+    space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+     a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+     d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D), }
+
   graphics = this.add.graphics({
     fillStyle: { color: 0xeeeeee },
     lineStyle: { width: 3, color: 0xffffff },
   });
 }
 
-funciton getRandomInt(max) {
+function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-let spawnTimer = 5000; // every 5 sec spawn a new enemy
+let spawnTimer = 1000; // every 5 sec spawn a new enemy
 
 function update(totalTime, deltaTime) {
   p1.update(deltaTime, keys);
@@ -93,11 +100,27 @@ function update(totalTime, deltaTime) {
   
   
   // spawn a new enemy after 5 sec
-  const newEnemy = enemies.find((e) => {return !e.isActive;});
-  if(newEnemy){
-    newEnemy.activate(getRandomInt(800), getRandomInt(600), getRandomInt(359));
+  spawnTimer -= deltaTime;
+  if(spawnTimer <= 0)
+  {
+    console.log("Inside the spawn Timer");
+    const newEnemy = enemies.find((e) => {return !e.isActive;});
+    if(newEnemy){
+      newEnemy.activate(getRandomInt(800), getRandomInt(600), getRandomInt(359));
+      spawnTimer = 1000;
+    }
   }
- // if(isCircleCollision())
+  
+  bullets.forEach((bullet) =>{
+    if(bullet.isActive){
+      enemies.forEach((enemy) =>{
+        if(isCircleCollision(bullet, enemy)){
+          enemy.deactivate();
+          bullet.deactivate();
+        }
+      });
+    }
+  });
 
   wasLastFrameSpaceDown = keys.space.isDown;
   // update bullets
@@ -107,6 +130,7 @@ function update(totalTime, deltaTime) {
   graphics.clear();
   p1.draw(graphics);
   bullets.forEach((b) => { b.draw(graphics); });
+  enemies.forEach((e) => { e.draw(graphics); });
 
 
 

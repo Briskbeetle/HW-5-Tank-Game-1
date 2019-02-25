@@ -2,7 +2,7 @@ class Enemy {
     constructor(x, y, radius) {
       this.x = x;
       this.y = y;
-      this.radius = radius;
+      this.radius = 20;
       this.isActive = false;// initializing enemies to be asleep
       this.baseGeo = [ // these points make up a tank!
         new Phaser.Geom.Point(-17, 10),
@@ -44,10 +44,11 @@ class Enemy {
   
     draw(graphics) {
       if(this.isActive){
-        graphics.fillStyle(0x009933, 1.0);
         graphics.save();
         graphics.translate(this.x, this.y);
-        graphics.fillCircle(0,0, this.radius);
+        graphics.rotate(this.forwardRot);
+        graphics.lineStyle(2, 0x009933, 1.0)
+        graphics.strokePoints(this.baseGeo);// tank player
         graphics.restore();
       }
     }
