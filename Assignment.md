@@ -5,6 +5,7 @@
 Make the cannon a separate element of the tank that rotates using the 'a' and 'd' keys. The angle of the cannon should also dictate the direction of the bullets fired by the player.
 
 COMPLEATED!!!
+Added new bullet shape!
 
 ## Enemies
 
@@ -31,6 +32,7 @@ COMPLEATED!!!
 COMPLEATED!!!
 
 - Make the bullets start at the end of the cannon barrel when they are activated.
+Compleated!!!
 
 ## Submission
 

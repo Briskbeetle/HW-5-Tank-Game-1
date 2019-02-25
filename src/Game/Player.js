@@ -27,7 +27,8 @@ class Player {
       new Phaser.Geom.Point(7, 25),
       new Phaser.Geom.Point(7, 0),
       new Phaser.Geom.Point(-7, 0),
-      new Phaser.Geom.Point(-7, 25)
+      new Phaser.Geom.Point(-7, 25),
+      new Phaser.Geom.Point(7,25)
     ]
   }
 
