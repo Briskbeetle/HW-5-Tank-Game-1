@@ -10,7 +10,7 @@ const phaserConfig = {
   height: 600,
 };
 
-const p1 = new Player(phaserConfig.width / 2, phaserConfig.height / 2, 10);
+const p1 = new Player(phaserConfig.width / 2, phaserConfig.height / 2, 30);
 
 const bullets = []; // an array of objects we can call from later
 for(let i = 0; i < 20; i++) { // have only 20 bullets on screen at one time
@@ -75,7 +75,7 @@ function update(totalTime, deltaTime) {
     p1.setX(0);
   }
 
-  if (p1.x < -5) {
+  if (p1.x < -20) {
     p1.setX(phaserConfig.width - 20);
   }
 
@@ -83,7 +83,7 @@ function update(totalTime, deltaTime) {
     p1.setY(0);
   }
 
-  if (p1.y < -5) {
+  if (p1.y < -20) {
     p1.setY(phaserConfig.height - 20);
   }
   
@@ -98,6 +98,27 @@ function update(totalTime, deltaTime) {
      // bullets[0].activate(p1.x, p1.y, p1.forwardRot);
 
   }
+    
+  bullets.forEach((bullet) =>{
+    if(bullet.isActive){
+      if(bullet.x > phaserConfig.width + 20)
+      {
+        bullet.deactivate();
+      }
+      if(bullet.x < -20)
+      {
+        bullet.deactivate();
+      }
+      if(bullet.y > phaserConfig.height + 20)
+      {
+        bullet.deactivate();
+      }
+      if(bullet.y < -20)
+      {
+        bullet.deactivate();
+      }
+      }});
+
   
   // spawn a new enemy after 5 sec
   spawnTimer -= deltaTime;
@@ -126,6 +147,7 @@ function update(totalTime, deltaTime) {
       enemy.deactivate();
     }
   });
+  
 
   wasLastFrameSpaceDown = keys.space.isDown;
   // update bullets
