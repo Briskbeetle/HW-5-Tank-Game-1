@@ -13,10 +13,24 @@
       body {
         overflow: hidden;
       }
+      #start-screen{ 
+        /* Changes the h1 text to mesh on top */
+        position: absolute;
+        color: white;
+      }
+      .hidden{
+        display: none;
+      }
     </style>
   </head>
 
-  <body></body>
+  <body>
+    <div id="start-screen" class="hidden">
+      <h1> Tank Game</h1>
+      <h2>Press Space to Begin</h2>
+    </div>
+
+  </body>
 
   <script>
     const game = require('./Game');
